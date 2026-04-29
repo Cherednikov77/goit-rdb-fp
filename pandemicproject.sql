@@ -29,3 +29,20 @@ FROM infectious_cases_norm ic
 JOIN entities e ON ic.entity_id = e.entity_id
 GROUP BY e.entity_name
 ORDER BY avg_polio DESC;
+DELIMITER //
+CREATE FUNCTION CalculateYearDifference(input_year INT) 
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE date_from_year DATE;
+    DECLARE year_diff INT;
+    SET date_from_year = MAKEDATE(input_year, 1);
+    SET year_diff = TIMESTAMPDIFF(YEAR, date_from_year, CURDATE());
+    RETURN year_diff;
+END //
+DELIMITER ;
+SELECT 
+    Year, 
+    CalculateYearDifference(Year) AS years_passed
+FROM infectious_cases_norm
+LIMIT 10;
