@@ -19,3 +19,13 @@ SELECT Year,
     MAKEDATE(Year, 1) AS start_of_year_date,
     CURDATE() AS today_date,TIMESTAMPDIFF(YEAR, MAKEDATE(Year, 1), CURDATE()) AS diff_in_years
 FROM infectious_cases_norm LIMIT 10;
+SELECT 
+    e.entity_name,
+    AVG(ic.polio_cases) AS avg_polio,
+    MIN(ic.polio_cases) AS min_polio,
+    MAX(ic.polio_cases) AS max_polio,
+    SUM(ic.Number_malaria) AS total_malaria
+FROM infectious_cases_norm ic
+JOIN entities e ON ic.entity_id = e.entity_id
+GROUP BY e.entity_name
+ORDER BY avg_polio DESC;
